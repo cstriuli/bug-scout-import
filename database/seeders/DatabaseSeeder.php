@@ -15,8 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $products = Product::factory(20)->create();
-        $companies = Company::factory(2)->create();
+        \App\Models\CompanyProductPivot::disableSearchSyncing();
+
+        $products = Product::factory(100)->create();
+        $companies = Company::factory(10)->create();
         $faker = \Faker\Factory::create();
 
         $companies->each(function (Company $company) use ($products, $faker) {
@@ -25,5 +27,7 @@ class DatabaseSeeder extends Seeder
                 ['published' =>  $faker->boolean]
             );
         });
+
+        \App\Models\CompanyProductPivot::enableSearchSyncing();
     }
 }
