@@ -17,11 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         $products = Product::factory(20)->create();
         $companies = Company::factory(2)->create();
+        $faker = \Faker\Factory::create();
 
-        $companies->each(function (Company $company) use ($products) {
+        $companies->each(function (Company $company) use ($products, $faker) {
             $company->products()->attach(
-                $products->random(rand(5, 10))->pluck('id')->toArray(),
-                ['published' =>  (bool) random_int(0, 1)]
+                $products->random(10)->pluck('id')->toArray(),
+                ['published' =>  $faker->boolean]
             );
         });
     }
