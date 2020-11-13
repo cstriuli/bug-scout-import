@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use \App\Models\Company;
+use \App\Models\Product;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $products = Product::factory(20)->create();
+        $companies = Company::factory(2)->create();
+
+        $companies->each(function (Company $company) use ($products) {
+            $company->products()->attach(
+                $products->random(rand(5, 10))->pluck('id')->toArray(),
+                ['published' =>  (bool) random_int(0, 1)]
+            );
+        });
     }
 }
